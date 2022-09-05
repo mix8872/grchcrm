@@ -1,0 +1,3690 @@
+openapi: 3.0.0
+info:
+    version: "1.0.0"
+    title: "crm.grechka"
+    license:
+        name: MIT
+servers:
+    - url: "localhost:3000"
+paths:
+    /user/login:
+        post:
+            description: "Отправка кода авторизации для получения JWT"
+            tags:
+                - user
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required:
+                                - login
+                                - password
+                            properties:
+                                login:
+                                    type: string
+                                password:
+                                    type: string
+            security: []
+            responses:
+                "200":
+                    description: "Успешное получение JWT"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    token:
+                                        type: string
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                                    data:
+                                        type: array
+                                        items:
+                                            $ref: "#/components/schemas/User"
+                "404":
+                    description: "Account not found"
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: "Unexpected error"
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+    /user/logout:
+        post:
+            description: "Разлогинить пользователя"
+            tags:
+                - user
+            responses:
+                "200":
+                    description: "Успешный выход"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    token:
+                                        type: string
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                "403":
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: "Unexpected error"
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+    /user/online:
+        get:
+            description: "Список авторизованных пользователей"
+            tags:
+                - user
+            responses:
+                "200":
+                    description: "Успешное получение списка авторизованных пользователей"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                                    data:
+                                        type: array
+                                        items:
+                                            $ref: "#/components/schemas/User"
+                "403":
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: "Unexpected error"
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+    /user/list:
+        post:
+            description: "Список пользователей"
+            tags:
+                - user
+            responses:
+                "200":
+                    description: "Успешное получение списка пользователей"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                                    data:
+                                        type: array
+                                        items:
+                                            $ref: "#/components/schemas/User"
+                "403":
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: "Unexpected error"
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+    /user:
+        put:
+            summary: "Create a new user"
+            tags:
+                - user
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/UserData"
+            responses:
+                "200":
+                    description: "Успешное получение данных о пользователе"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                                    data:
+                                        $ref: "#/components/schemas/User"
+                "403":
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+    /user/{id}:
+        get:
+            summary: "Returns details about a particular user"
+            tags:
+                - user
+            parameters:
+                - name: id
+                  in: path
+                  description: ID of the user
+                  required: true
+                  schema:
+                      type: string
+                      example: "3422b448-2460-4fd2-9183-8000de6f8343"
+            responses:
+                "200":
+                    description: "Успешное получение данных о пользователе"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                                    data:
+                                        $ref: "#/components/schemas/User"
+                "403":
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "404":
+                    description: Not found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+        post:
+            summary: "Update user data"
+            tags:
+                - user
+            parameters:
+                - name: id
+                  in: path
+                  description: ID of the user
+                  required: true
+                  schema:
+                      type: string
+                      example: "3422b448-2460-4fd2-9183-8000de6f8343"
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/UserData"
+            responses:
+                "200":
+                    description: "Успешное обновление данных о пользователе"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                                    data:
+                                        $ref: "#/components/schemas/User"
+                "403":
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "404":
+                    description: Not found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+        delete:
+            summary: "Delete user"
+            tags:
+                - user
+            parameters:
+                - name: id
+                  in: path
+                  description: ID of the user
+                  required: true
+                  schema:
+                      type: string
+                      example: "3422b448-2460-4fd2-9183-8000de6f8343"
+            responses:
+                "200":
+                    description: "Успешное удвление пользователя"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                "403":
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "404":
+                    description: Not found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+    /roles/:
+        post:
+            summary: "Get user access data"
+            tags:
+                - roles
+            responses:
+                "200":
+                    description: "Успешное получение данных о доступах пользователя"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                                    data:
+                                        type: array
+                                        items:
+                                            type: object
+                                        example: 
+                                            - id: "3422b448-2460-4fd2-9183-8000de6f8343"
+                                              title: 'Менеджер'
+                                            - id: "3422b448-2460-4fd2-9183-8000de6f8343"
+                                              title: 'Администратор'
+                "403":
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "404":
+                    description: Not found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+    /department:
+        put:
+            summary: "Create a new department"
+            tags:
+                - department
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/DepartmentData"
+            responses:
+                "200":
+                    description: "Успешное получение данных о пользователе"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                                    data:
+                                        $ref: "#/components/schemas/Department"
+                "403":
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+    /department/list:
+        get:
+            summary: "Returns department list"
+            tags:
+                - department
+            responses:
+                "200":
+                    description: "Успешное получение списка отделов"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                                    data:
+                                        type: array
+                                        items:
+                                            $ref: "#/components/schemas/Department"
+                "403":
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "404":
+                    description: Not found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+    /department/{id}:
+        get:
+            summary: "Returns details about a particular department"
+            tags:
+                - department
+            parameters:
+                - name: id
+                  in: path
+                  description: ID of the department
+                  required: true
+                  schema:
+                      type: string
+                      example: "3422b448-2460-4fd2-9183-8000de6f8343"
+            responses:
+                "200":
+                    description: "Успешное получение данных об отдле"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                                    data:
+                                        $ref: "#/components/schemas/Department"
+                "403":
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "404":
+                    description: Not found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+        post:
+            summary: "Update department data"
+            tags:
+                - department
+            parameters:
+                - name: id
+                  in: path
+                  description: ID of the department
+                  required: true
+                  schema:
+                      type: string
+                      example: "3422b448-2460-4fd2-9183-8000de6f8343"
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/DepartmentData"
+            responses:
+                "200":
+                    description: "Успешное обновление данных об отделе"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                                    data:
+                                        $ref: "#/components/schemas/Department"
+                "403":
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "404":
+                    description: Not found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+        delete:
+            summary: "Delete department data"
+            tags:
+                - department
+            parameters:
+                - name: id
+                  in: path
+                  description: ID of the department
+                  required: true
+                  schema:
+                      type: string
+                      example: "3422b448-2460-4fd2-9183-8000de6f8343"
+            responses:
+                "200":
+                    description: "Успешное удвление отдела"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                "403":
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "404":
+                    description: Not found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+    /tags-set:
+        put:
+            summary: "Create a new tag set"
+            tags:
+                - tags
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required:
+                                - name
+                                - tags
+                            properties:
+                                name:
+                                    type: string
+                                    example: "Set 1"
+                                tags:
+                                    type: string
+                                    example: "Tag1,Tag2,Tag3"
+            responses:
+                "200":
+                    description: "Успешное добавление списка тегов"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                                    data:
+                                        $ref: "#/components/schemas/TagSet"
+                "403":
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+    /tags-set/list:
+        get:
+            summary: "Returns tag sets list"
+            tags:
+                - tags
+            parameters:
+                - name: step_id
+                  in: query
+                  description: ID of the project step
+                  required: false
+                  schema:
+                      type: string
+                      example: "81f17954-a66d-4d7d-8cc8-47c9f6d59949"
+            responses:
+                "200":
+                    description: "Успешное получение списка наборов меток"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                                    data:
+                                        type: array
+                                        items:
+                                            $ref: "#/components/schemas/TagSetData"
+                "403":
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "404":
+                    description: Not found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+    /tags-set/{id}:
+        get:
+            summary: "Returns details about a particular tags set"
+            tags:
+                - tags
+            parameters:
+                - name: id
+                  in: path
+                  description: ID of the tags set
+                  required: true
+                  schema:
+                      type: string
+                      example: "3422b448-2460-4fd2-9183-8000de6f8343"
+            responses:
+                "200":
+                    description: "Успешное получение данных набора меток"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                                    data:
+                                        $ref: "#/components/schemas/TagSet"
+                "403":
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "404":
+                    description: Not found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+        post:
+            summary: "Update tags set data"
+            tags:
+                - tags
+            parameters:
+                - name: id
+                  in: path
+                  description: ID of the tags set
+                  required: true
+                  schema:
+                      type: string
+                      example: "3422b448-2460-4fd2-9183-8000de6f8343"
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/TagSetData"
+            responses:
+                "200":
+                    description: "Успешное обновление данных набора меток"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                                    data:
+                                        $ref: "#/components/schemas/TagSet"
+                "403":
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "404":
+                    description: Not found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+        delete:
+            summary: "Delete tags set data"
+            tags:
+                - tags
+            parameters:
+                - name: id
+                  in: path
+                  description: ID of the tags set
+                  required: true
+                  schema:
+                      type: string
+                      example: "3422b448-2460-4fd2-9183-8000de6f8343"
+            responses:
+                "200":
+                    description: "Успешное удвление набора меток"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                "403":
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "404":
+                    description: Not found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+    /tag/sort/{id}:
+        post:
+            summary: "Сортировка тегов в рамках набора"
+            tags:
+                - tags
+            parameters:
+                - name: id
+                  in: path
+                  description: ID of the tag set
+                  required: true
+                  schema:
+                      type: string
+                      example: "3422b448-2460-4fd2-9183-8000de6f8343"
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                tags_id:
+                                    type: array
+                                    description: ID тегов в нужном порядке
+                                    items:
+                                        type: string
+                                    example:
+                                        - "1a13bcc8-bdc9-4465-93bb-beb5dfc01aa7"
+                                        - "834a7479-43e4-483f-af61-e8e526dac1c5"
+            responses:
+                "200":
+                    description: "Успешное сортировка меток"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                "403":
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "404":
+                    description: Not found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+    /tag/{id}:
+        post:
+            summary: "Update tag data"
+            tags:
+                - tags
+            parameters:
+                - name: id
+                  in: path
+                  description: ID of the tag
+                  required: true
+                  schema:
+                      type: string
+                      example: "3422b448-2460-4fd2-9183-8000de6f8343"
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                name:
+                                    type: string
+                                    example: "Tag3"
+            responses:
+                "200":
+                    description: "Успешное обновление данных метки"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                                    data:
+                                        $ref: "#/components/schemas/Tag"
+                "403":
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "404":
+                    description: Not found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+        delete:
+            summary: "Delete tag"
+            tags:
+                - tags
+            parameters:
+                - name: id
+                  in: path
+                  description: ID of the tag
+                  required: true
+                  schema:
+                      type: string
+                      example: "3422b448-2460-4fd2-9183-8000de6f8343"
+            responses:
+                "200":
+                    description: "Успешное удвление метки"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                "403":
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "404":
+                    description: Not found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+    /canban-set:
+        put:
+            summary: "Create a new canban set"
+            tags:
+                - canban-sets
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                name:
+                                    type: string
+                                    example: "Canban set 1"
+                                statuses:
+                                    type: array
+                                    items:
+                                        type: string
+                                    example:
+                                        - "canban 1"
+                                        - "canban 2"
+                                        - "canban 3"
+            responses:
+                "200":
+                    description: "Успешное добавление набора статусов"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                                    data:
+                                        $ref: "#/components/schemas/CanbanSet"
+                "403":
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+    /canban-set/list:
+        get:
+            summary: "Returns canban sets list"
+            tags:
+                - canban-sets
+            parameters:
+                - name: step_id
+                  in: query
+                  description: ID of the project step
+                  required: false
+                  schema:
+                      type: string
+                      example: "81f17954-a66d-4d7d-8cc8-47c9f6d59949"
+            responses:
+                "200":
+                    description: "Успешное получение списка наборов статусов"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                                    data:
+                                        type: object
+                                        example:
+                                            $ref: "#/components/schemas/CanbanSet"
+                "403":
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "404":
+                    description: Not found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+    /canban-set/{id}:
+        get:
+            summary: "Returns details about a particular canban set"
+            tags:
+                - canban-sets
+            parameters:
+                - name: id
+                  in: path
+                  description: ID of the tags set
+                  required: true
+                  schema:
+                      type: string
+                      example: "3422b448-2460-4fd2-9183-8000de6f8343"
+            responses:
+                "200":
+                    description: "Успешное получение данных набора меток"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                                    data:
+                                        $ref: "#/components/schemas/CanbanSet"
+                "403":
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "404":
+                    description: Not found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+        post:
+            summary: "Update canban set data"
+            tags:
+                - canban
+            parameters:
+                - name: id
+                  in: path
+                  description: ID of the tags set
+                  required: true
+                  schema:
+                      type: string
+                      example: "3422b448-2460-4fd2-9183-8000de6f8343"
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                name:
+                                    type: string
+                                    example: "Canban set 1"
+                                statuses:
+                                    type: array
+                                    items:
+                                        type: string
+                                    example:
+                                        - "canban 1"
+                                        - "canban 2"
+                                        - "canban 3"
+            responses:
+                "200":
+                    description: "Успешное обновление данных набора статусов"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                                    data:
+                                        $ref: "#/components/schemas/CanbanSet"
+                "403":
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "404":
+                    description: Not found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+        delete:
+            summary: "Delete canban set data"
+            tags:
+                - canban
+            parameters:
+                - name: id
+                  in: path
+                  description: ID of the canban set
+                  required: true
+                  schema:
+                      type: string
+                      example: "3422b448-2460-4fd2-9183-8000de6f8343"
+            responses:
+                "200":
+                    description: "Успешное удвление набора статусов"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                "403":
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "404":
+                    description: Not found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+    /canban/sort/{id}:
+        post:
+            summary: "Сортировка статусов в рамках набора"
+            tags:
+                - canban
+            parameters:
+                - name: id
+                  in: path
+                  description: ID of the canban set
+                  required: true
+                  schema:
+                      type: string
+                      example: "3422b448-2460-4fd2-9183-8000de6f8343"
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                tags_id:
+                                    type: array
+                                    description: ID статусов в нужном порядке
+                                    items:
+                                        type: string
+                                    example:
+                                        - "1a13bcc8-bdc9-4465-93bb-beb5dfc01aa7"
+                                        - "834a7479-43e4-483f-af61-e8e526dac1c5"
+                                        - "1a13bcc8-bdc9-4465-93bb-beb5dfc01aa7"
+                                        - "834a7479-43e4-483f-af61-e8e526dac1c5"
+            responses:
+                "200":
+                    description: "Успешное сортировка статусов"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                "403":
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "404":
+                    description: Not found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+    /canban/{id}:
+        post:
+            summary: "Update canban data"
+            tags:
+                - canban
+            parameters:
+                - name: id
+                  in: path
+                  description: ID of the canban
+                  required: true
+                  schema:
+                      type: string
+                      example:
+                          - "3422b448-2460-4fd2-9183-8000de6f8343"
+                          - "3423c848-4570-9c2a-4365-5100de6f7548"
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                name:
+                                    type: string
+                                    example: "Status 2"
+            responses:
+                "200":
+                    description: "Успешное обновление данных статуса"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                                    data:
+                                        $ref: "#/components/schemas/Canban"
+                "403":
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "404":
+                    description: Not found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+        delete:
+            summary: "Delete canban"
+            tags:
+                - canban
+            parameters:
+                - name: id
+                  in: path
+                  description: ID of the canban
+                  required: true
+                  schema:
+                      type: string
+                      example: "3422b448-2460-4fd2-9183-8000de6f8343"
+            responses:
+                "200":
+                    description: "Успешное удвление метки"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                "403":
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "404":
+                    description: Not found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+    /project/list:
+        get:
+            summary: Get projects list
+            tags:
+                - projects
+            responses:
+                "200":
+                    description: "Возвращает список проектов"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                                    data:
+                                        type: array
+                                        items:
+                                            $ref: "#/components/schemas/ProjectList"
+    /project:
+        put:
+            summary: "Create a new project"
+            tags:
+                - projects
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/ProjectData"
+            responses:
+                "200":
+                    description: "Успешное создание проекта"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                                    data:
+                                        $ref: "#/components/schemas/Project"
+                "403":
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+    /project/{id}:
+        get:
+            summary: "Returns details about a particular project"
+            tags:
+                - projects
+            parameters:
+                - name: id
+                  in: path
+                  description: ID of the project
+                  required: true
+                  schema:
+                      type: string
+                      example: "3422b448-2460-4fd2-9183-8000de6f8343"
+            responses:
+                "200":
+                    description: "Успешное получение данных о проекте"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                                    data:
+                                        $ref: "#/components/schemas/Project"
+                "403":
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "404":
+                    description: Not found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+        post:
+            summary: "Update project data"
+            tags:
+                - projects
+            parameters:
+                - name: id
+                  in: path
+                  description: ID of the project
+                  required: true
+                  schema:
+                      type: string
+                      example: "3422b448-2460-4fd2-9183-8000de6f8343"
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/ProjectData"
+            responses:
+                "200":
+                    description: "Успешное обновление данных о проекте"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                                    data:
+                                        $ref: "#/components/schemas/Project"
+                "403":
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "404":
+                    description: project not found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+        delete:
+            summary: "Delete project"
+            tags:
+                - projects
+            parameters:
+                - name: id
+                  in: path
+                  description: ID of the project
+                  required: true
+                  schema:
+                      type: string
+                      example: "3422b448-2460-4fd2-9183-8000de6f8343"
+            responses:
+                "200":
+                    description: "Успешное удвление проекта"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                "403":
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "404":
+                    description: project not found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+    /project-step:
+        put:
+            summary: "Create a new project step"
+            tags:
+                - project-steps
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/ProjectStepData"
+            responses:
+                "200":
+                    description: "Успешное создание этапа проекта"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                                    data:
+                                        $ref: "#/components/schemas/ProjectStep"
+                "403":
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+    /project-step/{id}:
+        get:
+            summary: "Returns details about a particular project step"
+            tags:
+                - project-steps
+            parameters:
+                - name: id
+                  in: path
+                  description: ID of the project step
+                  required: true
+                  schema:
+                      type: string
+                      example: "3422b448-2460-4fd2-9183-8000de6f8343"
+            responses:
+                "200":
+                    description: "Успешное получение данных о этапе проекта"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                                    data:
+                                        $ref: "#/components/schemas/ProjectStep"
+                "403":
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "404":
+                    description: Not found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+        post:
+            summary: "Update project step data"
+            tags:
+                - projects
+            parameters:
+                - name: id
+                  in: path
+                  description: ID of the project step
+                  required: true
+                  schema:
+                      type: string
+                      example: "3422b448-2460-4fd2-9183-8000de6f8343"
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/ProjectStepData"
+            responses:
+                "200":
+                    description: "Успешное обновление данных о этапе проекта"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                                    data:
+                                        $ref: "#/components/schemas/ProjectStep"
+                "403":
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "404":
+                    description: project not found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+        delete:
+            summary: "Delete project step"
+            tags:
+                - projects
+            parameters:
+                - name: id
+                  in: path
+                  description: ID of the project step
+                  required: true
+                  schema:
+                      type: string
+                      example: "3422b448-2460-4fd2-9183-8000de6f8343"
+            responses:
+                "200":
+                    description: "Успешное удвление этапа проекта"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                "403":
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "404":
+                    description: project not found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+    /project-step/set-team/{id}:
+        put:
+            summary: "Задает команду этапа проекта (заменяет текущую команду)"
+            tags:
+                - project-steps
+            parameters:
+                - name: id
+                  in: path
+                  description: ID of the project step
+                  required: true
+                  schema:
+                      type: string
+                      example: "3422b448-2460-4fd2-9183-8000de6f8343"
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: array
+                            items:
+                                type: string
+                            example:
+                                - "3422b448-2460-4fd2-9183-8000de6f8343"
+                                - "3422b448-2460-4fd2-9183-8000de6f8343"
+                                - "3422b448-2460-4fd2-9183-8000de6f8343"
+            responses:
+                "200":
+                    description: "Команда проекта успешно задана"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                                    data:
+                                        description: Текущая команда этапа проекта
+                                        type: array
+                                        items:
+                                            type: string
+                                        example:
+                                            - "3422b448-2460-4fd2-9183-8000de6f8343"
+                                            - "3422b448-2460-4fd2-9183-8000de6f8343"
+                                            - "3422b448-2460-4fd2-9183-8000de6f8343"
+                "403":
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+        post:
+            summary: "Задает команду этапа проекта (добавляет в текущую команду)"
+            tags:
+                - projects
+            parameters:
+                - name: id
+                  in: path
+                  description: ID of the project step
+                  required: true
+                  schema:
+                      type: string
+                      example: "3422b448-2460-4fd2-9183-8000de6f8343"
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: array
+                            items:
+                                type: string
+                            example:
+                                - "3422b448-2460-4fd2-9183-8000de6f8343"
+                                - "3422b448-2460-4fd2-9183-8000de6f8343"
+                                - "3422b448-2460-4fd2-9183-8000de6f8343"
+            responses:
+                "200":
+                    description: "Успешно добавлено в команду проекта"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                                    data:
+                                        description: Текущая команда этапа проекта
+                                        type: array
+                                        items:
+                                            type: string
+                                        example:
+                                            - "3422b448-2460-4fd2-9183-8000de6f8343"
+                                            - "3422b448-2460-4fd2-9183-8000de6f8343"
+                                            - "3422b448-2460-4fd2-9183-8000de6f8343"
+                "403":
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+    /project-step/delete-team/{id}:
+        post:
+            summary: "Удаляет из команды этапа проекта"
+            tags:
+                - project-steps
+            parameters:
+                - name: id
+                  in: path
+                  description: ID of the project step
+                  required: true
+                  schema:
+                      type: string
+                      example: "3422b448-2460-4fd2-9183-8000de6f8343"
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: array
+                            items:
+                                type: string
+                            example:
+                                - "3422b448-2460-4fd2-9183-8000de6f8343"
+                                - "3422b448-2460-4fd2-9183-8000de6f8343"
+                                - "3422b448-2460-4fd2-9183-8000de6f8343"
+            responses:
+                "200":
+                    description: "Успешное удаление из команды проекта"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                                    data:
+                                        description: Текущая команда этапа проекта
+                                        type: array
+                                        items:
+                                            type: string
+                                        example:
+                                            - "3422b448-2460-4fd2-9183-8000de6f8343"
+                                            - "3422b448-2460-4fd2-9183-8000de6f8343"
+                                            - "3422b448-2460-4fd2-9183-8000de6f8343"
+                "403":
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+    /project-step/set-hours/{id}:
+        put:
+            summary: "Задает проданные часы этапа проекта (заменяет текущие данные)"
+            tags:
+                - project-steps
+            parameters:
+                - name: id
+                  in: path
+                  description: ID of the project step
+                  required: true
+                  schema:
+                      type: string
+                      example: "3422b448-2460-4fd2-9183-8000de6f8343"
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: array
+                            items:
+                                type: object
+                            example:
+                                - department_id: "3422b448-2460-4fd2-9183-8000de6f8343"
+                                  hours: 43.21
+                                - department_id: "3422b448-2460-4fd2-9183-8000de6f8343"
+                                  hours: 23.14
+                                - department_id: "3422b448-2460-4fd2-9183-8000de6f8343"
+                                  hours: 12.55
+            responses:
+                "200":
+                    description: "Проданные часы проекта успешно заданы"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                                    data:
+                                        description: Текущие часы этапа проекта
+                                        type: array
+                                        items:
+                                            $ref: "#/components/schemas/StepHours"
+                "403":
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+        post:
+            summary: "Задает проданные часы этапа проекта (добавляет данные)"
+            tags:
+                - projects
+            parameters:
+                - name: id
+                  in: path
+                  description: ID of the project step
+                  required: true
+                  schema:
+                      type: string
+                      example: "3422b448-2460-4fd2-9183-8000de6f8343"
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: array
+                            items:
+                                type: object
+                            example:
+                                - department_id: "3422b448-2460-4fd2-9183-8000de6f8343"
+                                  hours: 43.21
+                                - department_id: "3422b448-2460-4fd2-9183-8000de6f8343"
+                                  hours: 23.14
+                                - department_id: "3422b448-2460-4fd2-9183-8000de6f8343"
+                                  hours: 12.55
+            responses:
+                "200":
+                    description: "Успешно добавлено в команду проекта"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                                    data:
+                                        description: Текущие часы этапа проекта
+                                        type: array
+                                        items:
+                                            $ref: "#/components/schemas/StepHours"
+                "403":
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+    /project-step/delete-hours/{id}:
+        post:
+            summary: "Удаляет проданные часы этпа проекта"
+            tags:
+                - project-steps
+            parameters:
+                - name: id
+                  in: path
+                  description: ID of the project step
+                  required: true
+                  schema:
+                      type: string
+                      example: "3422b448-2460-4fd2-9183-8000de6f8343"
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            description: ID часов этапа проекта
+                            type: array
+                            items:
+                                type: string
+                            example:
+                                - "3422b448-2460-4fd2-9183-8000de6f8343"
+                                - "3422b448-2460-4fd2-9183-8000de6f8343"
+                                - "3422b448-2460-4fd2-9183-8000de6f8343"
+            responses:
+                "200":
+                    description: "Успешное удаление из команды проекта"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                                    data:
+                                        description: Текущие часы этапа проекта
+                                        type: array
+                                        items:
+                                            $ref: "#/components/schemas/StepHours"
+                "403":
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+    /project-step/tags/{step-id}/{tag-set-id}:
+        put:
+            summary: "Добавляет набор меток этапу проекта"
+            tags:
+                - project-steps
+            parameters:
+                - name: step-id
+                  in: path
+                  description: ID of the project step
+                  required: true
+                  schema:
+                      type: string
+                      example: "3422b448-2460-4fd2-9183-8000de6f8343"
+                - name: tag-set-id
+                  in: path
+                  description: ID of the tags set
+                  required: true
+                  schema:
+                      type: string
+                      example: "3422b448-2460-4fd2-9183-8000de6f8343"
+            responses:
+                "200":
+                    description: "Успешное добавление набора меток в этап проекта"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                                    data:
+                                        description: Текущие наборы меток этапа проекта
+                                        type: array
+                                        items:
+                                            $ref: "#/components/schemas/TagSet"
+                "403":
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+        delete:
+            summary: "Удаляет набор меток из этпа проекта"
+            tags:
+                - project-steps
+            parameters:
+                - name: step-id
+                  in: path
+                  description: ID of the project step
+                  required: true
+                  schema:
+                      type: string
+                      example: "3422b448-2460-4fd2-9183-8000de6f8343"
+                - name: tag-set-id
+                  in: path
+                  description: ID of the tags set
+                  required: true
+                  schema:
+                      type: string
+                      example: "3422b448-2460-4fd2-9183-8000de6f8343"
+            responses:
+                "200":
+                    description: "Успешное удаление набора меток из этапа проекта"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                                    data:
+                                        description: Текущие наборы меток этапа проекта
+                                        type: array
+                                        items:
+                                            $ref: "#/components/schemas/TagSet"
+                "403":
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+    /project/{id}/task:
+        get:
+            summary: Get tasks list
+            tags:
+                - tasks
+            parameters:
+                - name: id
+                  in: path
+                  description: ID проекта
+                  required: true
+                  schema:
+                      type: string
+                      example: "3422b448-2460-4fd2-9183-8000de6f8343"
+            responses:
+                "200":
+                    description: "Возвращает список задач по проекту"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                                    data:
+                                        type: array
+                                        items:
+                                            $ref: "#/components/schemas/Task"
+    /project-step/{id}/task:
+        get:
+            summary: Get tasks list
+            tags:
+                - tasks
+            parameters:
+                - name: id
+                  in: path
+                  description: ID этапа проекта
+                  required: true
+                  schema:
+                      type: string
+                      example: "3422b448-2460-4fd2-9183-8000de6f8343"
+            responses:
+                "200":
+                    description: "Возвращает список задач по этапу проекта"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                                    data:
+                                        type: array
+                                        items:
+                                            $ref: "#/components/schemas/Task"
+        put:
+            summary: "Create a new task"
+            tags:
+                - tasks
+            parameters:
+                - name: id
+                  in: path
+                  description: ID этапа проекта
+                  required: true
+                  schema:
+                      type: string
+                      example: "3422b448-2460-4fd2-9183-8000de6f8343"
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/TaskData"
+            responses:
+                "200":
+                    description: "Успешное создание задачи"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                                    data:
+                                        $ref: "#/components/schemas/Task"
+                "403":
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+    /task/{id}:
+        get:
+            summary: "Returns details about a particular task"
+            tags:
+                - tasks
+            parameters:
+                - name: id
+                  in: path
+                  description: ID of the task
+                  required: true
+                  schema:
+                      type: string
+                      example: "3422b448-2460-4fd2-9183-8000de6f8343"
+            responses:
+                "200":
+                    description: "Успешное получение данных о задаче"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                                    data:
+                                        $ref: "#/components/schemas/Task"
+                "403":
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "404":
+                    description: Not found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+        post:
+            summary: "Update task data"
+            tags:
+                - tasks
+            parameters:
+                - name: id
+                  in: path
+                  description: ID of the task
+                  required: true
+                  schema:
+                      type: string
+                      example: "3422b448-2460-4fd2-9183-8000de6f8343"
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/TaskData"
+            responses:
+                "200":
+                    description: "Успешное обновление данных о задаче"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                                    data:
+                                        $ref: "#/components/schemas/Task"
+                "403":
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "404":
+                    description: task not found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+        delete:
+            summary: "Delete task"
+            tags:
+                - tasks
+            parameters:
+                - name: id
+                  in: path
+                  description: ID of the task
+                  required: true
+                  schema:
+                      type: string
+                      example: "3422b448-2460-4fd2-9183-8000de6f8343"
+            responses:
+                "200":
+                    description: "Успешное удвление задачи"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                "403":
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "404":
+                    description: task not found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+    /task/{id}/comment:
+        get:
+            summary: "Get all task comments"
+            tags:
+                - comment
+            parameters:
+                - name: id
+                  in: path
+                  description: ID задачи
+                  required: true
+                  schema:
+                      type: string
+                      example: "3422b448-2460-4fd2-9183-8000de6f8343"
+            responses:
+                "200":
+                    description: "Успешное получения списка коментариев"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                                    data:
+                                        type: array
+                                        items:
+                                            $ref: "#/components/schemas/Comment"
+                "403":
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+        put:
+            summary: "Create a new task comment"
+            tags:
+                - tasks
+            parameters:
+                - name: id
+                  in: path
+                  description: ID задачи
+                  required: true
+                  schema:
+                      type: string
+                      example: "3422b448-2460-4fd2-9183-8000de6f8343"
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/CommentData"
+            responses:
+                "200":
+                    description: "Успешное создание задачи"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                                    data:
+                                        $ref: "#/components/schemas/Comment"
+                "403":
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+        post:
+            summary: "Update a task comment"
+            tags:
+                - tasks
+            parameters:
+                - name: id
+                  in: path
+                  description: ID коментария
+                  required: true
+                  schema:
+                      type: string
+                      example: "3422b448-2460-4fd2-9183-8000de6f8343"
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/CommentData"
+            responses:
+                "200":
+                    description: "Успешное создание задачи"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                                    data:
+                                        $ref: "#/components/schemas/Comment"
+                "403":
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+        delete:
+            summary: "Delete a task comment"
+            tags:
+                - tasks
+            parameters:
+                - name: id
+                  in: path
+                  description: ID коментария
+                  required: true
+                  schema:
+                      type: string
+                      example: "3422b448-2460-4fd2-9183-8000de6f8343"
+            responses:
+                "200":
+                    description: "Успешное создание задачи"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                "403":
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+    /task/{id}/timer:
+        get:
+            summary: Get tasks timer list
+            tags:
+                - timer
+            parameters:
+                - name: id
+                  in: path
+                  description: ID задачи
+                  required: true
+                  schema:
+                      type: string
+                      example: "3422b448-2460-4fd2-9183-8000de6f8343"
+            responses:
+                "200":
+                    description: "Возвращает список таймеров по задаче для текущего пользователя"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                                    data:
+                                        type: array
+                                        items:
+                                            $ref: "#/components/schemas/Timer"
+        put:
+            summary: "Create a new timer"
+            tags:
+                - timer
+            parameters:
+                - name: id
+                  in: path
+                  description: ID задачи
+                  required: true
+                  schema:
+                      type: string
+                      example: "3422b448-2460-4fd2-9183-8000de6f8343"
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/TimerData"
+            responses:
+                "200":
+                    description: "Успешный запуск (остановка) таймера"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                                    data:
+                                        $ref: "#/components/schemas/Timer"
+                "403":
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+    /timer/{id}:
+        get:
+            summary: "Returns details about a particular timer"
+            tags:
+                - timer
+            parameters:
+                - name: id
+                  in: path
+                  description: ID of the timer
+                  required: true
+                  schema:
+                      type: string
+                      example: "3422b448-2460-4fd2-9183-8000de6f8343"
+            responses:
+                "200":
+                    description: "Успешное получение данных о таймере"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                                    data:
+                                        $ref: "#/components/schemas/Timer"
+                "403":
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "404":
+                    description: Not found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+        post:
+            summary: "Update timer data"
+            tags:
+                - tasks
+            parameters:
+                - name: id
+                  in: path
+                  description: ID of the task
+                  required: true
+                  schema:
+                      type: string
+                      example: "3422b448-2460-4fd2-9183-8000de6f8343"
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/TimerData"
+            responses:
+                "200":
+                    description: "Успешное обновление данных таймера"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                                    data:
+                                        $ref: "#/components/schemas/Timer"
+                "403":
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "404":
+                    description: task not found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+        delete:
+            summary: "Delete timer"
+            tags:
+                - timer
+            parameters:
+                - name: id
+                  in: path
+                  description: ID of the timer
+                  required: true
+                  schema:
+                      type: string
+                      example: "3422b448-2460-4fd2-9183-8000de6f8343"
+            responses:
+                "200":
+                    description: "Успешное удвление таймера"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                "403":
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "404":
+                    description: task not found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+components:
+    schemas:
+        User:
+            type: object
+            required:
+                - id
+                - name
+                - second_name
+                - last_name
+                - depart_id
+                - email
+                - phone
+                - status
+                - role
+                - created_at
+                - updated_at
+            properties:
+                id:
+                    type: string
+                    example: "3422b448-2460-4fd2-9183-8000de6f8343"
+                name:
+                    type: string
+                    example: "John"
+                second_name:
+                    type: string
+                    example: "Govard"
+                last_name:
+                    type: string
+                    example: "Doe"
+                department:
+                    $ref: "#/components/schemas/DepartmentData"
+                email:
+                    type: string
+                    example: "jdoe@somemail.com"
+                phone:
+                    type: string
+                    example: "+79781234567"
+                status:
+                    type: number
+                    format: int32
+                    example: 1
+                permissions:
+                    type: string
+                    example: "IAAAACAAAAA"
+                created_at:
+                    type: string
+                    example: "2022-07-05 18:33:43"
+                updated_at:
+                    type: string
+                    example: "2022-07-05 18:33:43"
+        UserData:
+            type: object
+            required:
+                - name
+                - second_name
+                - last_name
+                - depart_id
+                - email
+                - phone
+                - status
+            properties:
+                name:
+                    type: string
+                    example: "John"
+                second_name:
+                    type: string
+                    example: "Govard"
+                last_name:
+                    type: string
+                    example: "Doe"
+                department:
+                    $ref: "#/components/schemas/DepartmentData"
+                email:
+                    type: string
+                    example: "jdoe@somemail.com"
+                phone:
+                    type: string
+                    example: "+79781234567"
+                status:
+                    type: number
+                    format: int32
+                    example: 1
+        UserLight:
+            type: object
+            required:
+                - id
+                - name
+                - second_name
+                - last_name
+                - department
+                - email
+            properties:
+                id:
+                    type: string
+                    example: "3422b448-2460-4fd2-9183-8000de6f8343"
+                name:
+                    type: string
+                    example: "John"
+                second_name:
+                    type: string
+                    example: "Govard"
+                last_name:
+                    type: string
+                    example: "Doe"
+                department:
+                    $ref: "#/components/schemas/DepartmentData"
+                email:
+                    type: string
+                    example: "jdoe@somemail.com"
+        ProjectList:
+            type: object
+            required:
+                - id
+                - name
+                - code
+                - author
+                - status
+                - created_at
+                - updated_at
+            properties:
+                id:
+                    type: string
+                    example: "0d6964cb-0683-42cb-b6a6-60f0dd6d859d"
+                name:
+                    type: string
+                    example: "Project 1"
+                code:
+                    type: string
+                    example: "prj1"
+                author:
+                    $ref: "#/components/schemas/UserLight"
+                tasksCount:
+                    type: object
+                    properties:
+                        closed:
+                            type: number
+                            format: int32
+                            example: 2
+                        expired:
+                            type: number
+                            format: int32
+                            example: 2
+                        current:
+                            type: number
+                            format: int32
+                            example: 2
+                totalPlanHours:
+                    type: number
+                    format: float
+                    example: 45.42
+                totalSpentHours:
+                    type: number
+                    format: float
+                    example: 45.42
+                dates:
+                    type: object
+                    description: "Актуальные даты проекта, расчитываются из плановых дат этапов проекта"
+                    properties:
+                        from:
+                            type: string
+                            example: "2022-05-03 00:00:00"
+                        to:
+                            type: string
+                            example: "2022-06-12 00:00:00"
+                delay:
+                    type: number
+                    description: "Дней просрочки проекта"
+                    format: int32
+                    example: 2
+                status:
+                    type: integer
+                    format: int32
+                    example: 1
+                created_at:
+                    type: string
+                    example: "2022-07-05 18:33:43"
+                updated_at:
+                    type: string
+                    example: "2022-07-05 18:33:43"
+        ProjectData:
+            type: object
+            required:
+                - name
+                - code
+                - author
+                - status
+            properties:
+                name:
+                    type: string
+                    example: "Project1"
+                code:
+                    type: string
+                    example: "prj1"
+                author:
+                    $ref: "#/components/schemas/UserLight"
+                canban_id:
+                    type: string
+                    example: "27b41992-99a4-4a85-8a6f-4481a6e40f95"
+                status:
+                    type: integer
+                    format: int32
+                    example: 1
+        Project:
+            type: object
+            required:
+                - id
+                - name
+                - code
+                - author
+                - status
+                - created_at
+                - updated_at
+            properties:
+                id:
+                    type: string
+                    example: "0d6964cb-0683-42cb-b6a6-60f0dd6d859d"
+                name:
+                    type: string
+                    example: "Project1"
+                code:
+                    type: string
+                    example: "prj1"
+                author:
+                   $ref: "#/components/schemas/UserLight"
+                team:
+                    type: array
+                    items:
+                        $ref: "#/components/schemas/UserLight"
+                steps:
+                    type: array
+                    items:
+                        $ref: "#/components/schemas/ProjectStep"
+                tasksCount:
+                    type: object
+                    properties:
+                        closed:
+                            type: number
+                            format: int32
+                            example: 2
+                        expired:
+                            type: number
+                            format: int32
+                            example: 3
+                        current:
+                            type: number
+                            format: int32
+                            example: 4
+                totalPlanHours:
+                    type: number
+                    format: float
+                    example: 45.42
+                totalSpentHours:
+                    type: number
+                    format: float
+                    example: 45.42
+                dates:
+                    type: object
+                    description: "Актуальные даты проекта, расчитываются из плановых дат этапов проекта"
+                    properties:
+                        from:
+                            type: string
+                            example: "2022-05-03 00:00:00"
+                        to:
+                            type: string
+                            example: "2022-06-12 00:00:00"
+                delay:
+                    type: number
+                    description: "Дней просрочки проекта (отрицательное значение - отсалось до сдачи, положительное - просрочка)"
+                    format: int32
+                    example: 0
+                canban_id:
+                    type: string
+                    example: "27b41992-99a4-4a85-8a6f-4481a6e40f95"
+                status:
+                    type: integer
+                    format: int32
+                    example: 1
+                created_at:
+                    type: string
+                    example: "2022-07-05 18:33:43"
+                updated_at:
+                    type: string
+                    example: "2022-07-05 18:33:43"
+        ProjectStepData:
+            type: object
+            required:
+                - project_id
+                - code
+                - name
+                - description
+                - author
+                - responsible
+                - start_date
+                - end_date
+                - working_type
+                - status
+            properties:
+                project_id:
+                    type: string
+                    example: "0d6964cb-0683-42cb-b6a6-60f0dd6d859d"
+                name:
+                    type: string
+                    example: "Project1"
+                code:
+                    type: string
+                    example: "prj1"
+                description:
+                    type: string
+                    example: "A Version 1 UUID is a universally unique identifier that is generated using a timestamp and the MAC address of the computer on which it was generated."
+                author:
+                    $ref: "#/components/schemas/UserLight"
+                responsible:
+                    $ref: "#/components/schemas/UserLight"
+                cost:
+                    type: string
+                    nullable: true
+                    example: "2360000.00"
+                start_date:
+                    type: string
+                    example: "2022-07-05 18:33:43"
+                end_date:
+                    type: string
+                    example: "2022-07-05 18:33:43"
+                working_type:
+                    type: string
+                    enum: ["t&m", "presale"]
+                status:
+                    type: integer
+                    format: int32
+                    example: 1
+                tag_sets:
+                    type: array
+                    items:
+                        $ref: "#/components/schemas/TagSet"
+                canban_set_id:
+                    type: string
+                    example: "25ef6a82-0255-4509-b5ff-4c6430fbfd8a"
+                delay:
+                    type: number
+                    description: "Дней просрочки проекта"
+                    format: int32
+                    example: 0
+        ProjectStep:
+            type: object
+            required:
+                - id
+                - project_id
+                - code
+                - name
+                - description
+                - author
+                - responsible
+                - start_date
+                - end_date
+                - working_type
+                - created_at
+                - updated_at
+                - status
+            properties:
+                id:
+                    type: string
+                    example: "81f17954-a66d-4d7d-8cc8-47c9f6d59949"
+                project_id:
+                    type: string
+                    example: "0d6964cb-0683-42cb-b6a6-60f0dd6d859d"
+                name:
+                    type: string
+                    example: "Project1"
+                code:
+                    type: string
+                    example: "prj1"
+                description:
+                    type: string
+                    example: "A Version 1 UUID is a universally unique identifier that is generated using a timestamp and the MAC address of the computer on which it was generated."
+                author:
+                    $ref: "#/components/schemas/UserLight"
+                responsible:
+                    $ref: "#/components/schemas/UserLight"
+                team:
+                    type: array
+                    items:
+                        $ref: "#/components/schemas/UserLight"
+                cost:
+                    type: number
+                    format: float
+                    nullable: true
+                    example: 2360000.00
+                dates:
+                    type: object
+                    description: "Плановые даты этапа проекта"
+                    properties:
+                        from:
+                            type: string
+                            example: "2022-05-03 00:00:00"
+                        to:
+                            type: string
+                            example: "2022-06-12 00:00:00"
+                working_type:
+                    type: string
+                    enum: ["t&m", "presale"]
+                status:
+                    type: integer
+                    format: int32
+                    example: 1
+                tag_sets:
+                    type: array
+                    items:
+                        $ref: "#/components/schemas/TagSet"
+                canban_set_id:
+                    type: string
+                    example: "25ef6a82-0255-4509-b5ff-4c6430fbfd8a"
+                delay:
+                    type: number
+                    description: "Дней просрочки проекта"
+                    format: int32
+                    example: 0
+                created_at:
+                    type: string
+                    example: "2022-07-05 18:33:43"
+                updated_at:
+                    type: string
+                    example: "2022-07-05 18:33:43"
+        StepHours:
+            type: object
+            required:
+                - id
+                - step_id
+                - department_id
+                - hours
+                - created_at
+                - updated_at
+            properties:
+                id:
+                    type: string
+                    example: "fff075b9-7b2f-4bb9-82fc-c5ce796da9ba"
+                project_id:
+                    type: string
+                    example: "81f17954-a66d-4d7d-8cc8-47c9f6d59949"
+                department_id:
+                    type: string
+                    example: "99fe3c8c-ef32-4d72-ba26-31536dc5fbdf"
+                hours:
+                    type: number
+                    format: float
+                    example: 38.2
+                created_at:
+                    type: string
+                    example: "2022-07-05 18:33:43"
+                updated_at:
+                    type: string
+                    example: "2022-07-05 18:33:43"
+        Department:
+            type: object
+            required:
+                - id
+                - name
+                - rate
+                - status
+                - color
+                - created_at
+                - updated_at
+            properties:
+                id:
+                    type: string
+                    example: "99fe3c8c-ef32-4d72-ba26-31536dc5fbdf"
+                name:
+                    type: string
+                    example: "Frontend"
+                color:
+                    type: string
+                    example: "#a134b1"
+                status:
+                    type: integer
+                    format: int32
+                    example: 1
+                created_at:
+                    type: string
+                    example: "2022-07-05 18:33:43"
+                updated_at:
+                    type: string
+                    example: "2022-07-05 18:33:43"
+        DepartmentData:
+            type: object
+            required:
+                - name
+                - rate
+                - color
+                - status
+            properties:
+                name:
+                    type: string
+                    example: "Frontend"
+                color:
+                    type: string
+                    example: "#a134b1"
+                status:
+                    type: integer
+                    format: int32
+                    example: 2
+        TaskData:
+            type: object
+            required:
+                - step_id
+                - name
+                - description
+                - priority
+                - author
+                - executor
+                - hours_plan
+                - plan
+                - canban_id
+                - parent_id
+                - status
+            properties:
+                parent_id:
+                    type: string
+                    example: "08b2ae8e-8af7-4289-be80-2d4a36e15d1f"
+                step_id:
+                    type: string
+                    example: "fff075b9-7b2f-4bb9-82fc-c5ce796da9ba"
+                author:
+                    $ref: "#/components/schemas/UserLight"
+                executor:
+                    $ref: "#/components/schemas/UserLight"
+                canban_id:
+                    type: string
+                    example: "27b41992-99a4-4a85-8a6f-4481a6e40f95"
+                name:
+                    type: string
+                    example: "Task 1"
+                code:
+                    type: string
+                    example: "task1"
+                description:
+                    type: string
+                    example: "A Version 1 UUID is a universally unique identifier that is generated using a timestamp and the MAC address of the computer on which it was generated."
+                priority:
+                    type: number
+                    format: int32
+                    example: 6
+                hours_plan:
+                    type: number
+                    format: float
+                    example: 38.2
+                plan:
+                    type: object
+                    properties:
+                        started:
+                            type: string
+                            example: "2022-07-05 18:33:43"
+                        ended:
+                            type: string
+                            example: "2022-07-05 18:33:43"
+                status:
+                    type: integer
+                    format: int32
+                    example: 2
+        Task:
+            type: object
+            required:
+                - id
+                - project_id
+                - step_id
+                - name
+                - description
+                - priority
+                - author
+                - executor
+                - hours_plan
+                - plan
+                - canban_id
+                - parent_id
+                - status
+                - created_at
+                - updated_at
+            properties:
+                id:
+                    type: string
+                    example: "08b2ae8e-8af7-4289-be80-2d4a36e15d1f"
+                parent_id:
+                    type: string
+                    example: "08b2ae8e-8af7-4289-be80-2d4a36e15d1f"
+                project_id:
+                    type: string
+                    example: "81f17954-a66d-4d7d-8cc8-47c9f6d59949"
+                step_id:
+                    type: string
+                    example: "fff075b9-7b2f-4bb9-82fc-c5ce796da9ba"
+                author:
+                    $ref: "#/components/schemas/UserLight"
+                executor:
+                    $ref: "#/components/schemas/UserLight"
+                canban_id:
+                    type: string
+                    example: "27b41992-99a4-4a85-8a6f-4481a6e40f95"
+                name:
+                    type: string
+                    example: "Task 1"
+                code:
+                    type: string
+                    example: "task1"
+                description:
+                    type: string
+                    example: "A Version 1 UUID is a universally unique identifier that is generated using a timestamp and the MAC address of the computer on which it was generated."
+                priority:
+                    type: number
+                    format: int32
+                    example: 6
+                hours_plan:
+                    type: number
+                    format: float
+                    example: 38.2
+                plan:
+                    type: object
+                    properties:
+                        started:
+                            type: string
+                            example: "2022-07-05 18:33:43"
+                        ended:
+                            type: string
+                            example: "2022-07-05 18:33:43"
+                status:
+                    type: integer
+                    format: int32
+                    example: 2
+                tags:
+                    type: array
+                    items:
+                        $ref: "#/components/schemas/Tag"
+                timers:
+                    type: array
+                    items:
+                        $ref: "#/components/schemas/Timer"
+                created_at:
+                    type: string
+                    example: "2022-07-05 18:33:43"
+                updated_at:
+                    type: string
+                    example: "2022-07-05 18:33:43"
+        TaskHours:
+            type: object
+            required:
+                - id
+                - task_id
+                - project_id
+                - user
+                - type
+                - hours
+            properties:
+                id:
+                    type: string
+                    example: "7d8a967c-2297-41ef-9e69-3cffa46ba8d0"
+                task_id:
+                    type: string
+                    example: "08b2ae8e-8af7-4289-be80-2d4a36e15d1f"
+                project_id:
+                    type: string
+                    example: "81f17954-a66d-4d7d-8cc8-47c9f6d59949"
+                user:
+                    $ref: "#/components/schemas/UserLight"
+                type:
+                    type: string
+                    enum: ["manual", "tracker"]
+                hours:
+                    type: number
+                    format: float
+                    example: 1.30
+                comment:
+                    type: string
+                    nullable: true
+                    example: "example comment 1"
+                started_at:
+                    type: string
+                    nullable: true
+                    example: "2022-04-22 09:10:12"
+                ended_at:
+                    type: string
+                    nullable: true
+                    example: "2022-04-22 09:10:12"
+        TagSet:
+            type: object
+            required:
+                - id
+                - name
+            properties:
+                id:
+                    type: string
+                    example: "23486ce5-b81e-4c53-9029-51d464b42b44"
+                name:
+                    type: string
+                    example: "Example set 1"
+        TagSetData:
+            type: object
+            required:
+                - id
+                - name
+                - tags
+            properties:
+                id:
+                    type: string
+                    example: "23486ce5-b81e-4c53-9029-51d464b42b44"
+                name:
+                    type: string
+                    example: "Example set 1"
+                tags:
+                    type: array
+                    items:
+                        $ref: "#/components/schemas/Tag"
+        Tag:
+            type: object
+            required:
+                - id
+                - set_id
+                - name
+            properties:
+                id:
+                    type: string
+                    example: "1a13bcc8-bdc9-4465-93bb-beb5dfc01aa7"
+                set_id:
+                    type: string
+                    example: "23486ce5-b81e-4c53-9029-51d464b42b44"
+                name:
+                    type: string
+                    example: "example_tag_1"
+                color:
+                    type: string
+                    example: "#fa34de"
+                order:
+                    type: number
+                    format: int32
+                    example: 3
+        CanbanSet:
+            type: object
+            required:
+                - id
+                - name
+            properties:
+                id:
+                    type: string
+                    example: "25ef6a82-0255-4509-b5ff-4c6430fbfd8a"
+                name:
+                    type: string
+                    example: "Example set 1"
+                statuses:
+                    type: array
+                    items:
+                        $ref: "#/components/schemas/Canban"
+                created_at:
+                    type: string
+                    example: "2022-07-05 18:33:43"
+                updated_at:
+                    type: string
+                    example: "2022-07-05 18:33:43"
+        Canban:
+            type: object
+            required:
+                - id
+                - set_id
+                - name
+                - order
+            properties:
+                id:
+                    type: string
+                    example: "27b41992-99a4-4a85-8a6f-4481a6e40f95"
+                set_id:
+                    type: string
+                    example: "25ef6a82-0255-4509-b5ff-4c6430fbfd8a"
+                name:
+                    type: string
+                    example: "example_status_1"
+                order:
+                    type: number
+                    format: int32
+                    example: 4
+                created_at:
+                    type: string
+                    example: "2022-07-05 18:33:43"
+                updated_at:
+                    type: string
+                    example: "2022-07-05 18:33:43"
+        CommentData:
+            type: object
+            required:
+                - task_id
+                - user
+                - text
+                - status
+            properties:
+                task_id:
+                    type: string
+                    example: "08b2ae8e-8af7-4289-be80-2d4a36e15d1f"
+                user:
+                    $ref: "#/components/schemas/UserLight"
+                text:
+                    type: string
+                    example: "Some comment text 1"
+        Comment:
+            type: object
+            required:
+                - id
+                - task_id
+                - user
+                - text
+                - status
+                - created_at
+                - updated_at
+            properties:
+                id:
+                    type: string
+                    example: "f5b253da-4db8-4ab3-869f-5c3803c45455"
+                task_id:
+                    type: string
+                    example: "08b2ae8e-8af7-4289-be80-2d4a36e15d1f"
+                user:
+                    $ref: "#/components/schemas/UserLight"
+                text:
+                    type: string
+                    example: "Some comment text 1"
+                created_at:
+                    type: string
+                    example: "2022-07-05 18:33:43"
+                updated_at:
+                    type: string
+                    example: "2022-07-05 18:33:43"
+        TimerData:
+            type: object
+            required:
+                - task_id
+                - type
+            properties:
+                task_id:
+                    type: string
+                    example: "f5b253da-4db8-4ab3-869f-5c3803c45455"
+                type:
+                    enum: ['manual', 'tracker']
+                    example: "tracker"
+                comment:
+                    type: string
+                    nullable: true
+                    example: "Some tracker comment"
+        Timer:
+            type: object
+            required:
+                - id
+                - task_id
+                - user
+                - type
+            properties:
+                id:
+                    type: string
+                    example: "f5b253da-4db8-4ab3-869f-5c3803c45455"
+                task_id:
+                    type: string
+                    example: "f5b253da-4db8-4ab3-869f-5c3803c45455"
+                user:
+                    $ref: "#/components/schemas/UserLight"
+                type:
+                    enum: ['manual', 'tracker']
+                    example: "tracker"
+                comment:
+                    type: string
+                    nullable: true
+                    example: "Some tracker comment"
+                start_tracking_at:
+                    type: string
+                    nullable: true
+                    example: "2022-08-12 16:33:14"
+                end_tracking_at:
+                    type: string
+                    nullable: true
+                    example: "2022-08-12 17:11:23"
+                total_hours:
+                    type: number
+                    format: float
+                    nullable: true
+                    example: 0.58
+        Error:
+            type: object
+            required:
+                - message
+            properties:
+                message:
+                    type: string
+                    example:
+                        - Something went wrong
+    securitySchemes:
+        bearerAuth:
+            type: http
+            scheme: bearer
+            bearerFormat: JWT
+security:
+    - bearerAuth: []
