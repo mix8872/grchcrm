@@ -1570,6 +1570,111 @@ paths:
                         application/json:
                             schema:
                                 $ref: "#/components/schemas/Error"
+    /project/{id}/tasks:
+        get:
+            summary: Get tasks list
+            tags:
+                - tasks
+            parameters:
+                - name: id
+                  in: path
+                  description: ID проекта
+                  required: true
+                  schema:
+                      type: string
+                      example: "3422b448-2460-4fd2-9183-8000de6f8343"
+                - name: users
+                  in: query
+                  description: фильтр по uuid пользователя (возможно несколько, через запятую)
+                  schema:
+                      type: string
+                      example: "3422b448-2460-4fd2-9183-8000de6f8343"
+                - name: steps
+                  in: query
+                  description: фильтр по uuid этапа проекта (возможно несколько, через запятую)
+                  schema:
+                      type: string
+                      example: "81f17954-a66d-4d7d-8cc8-47c9f6d59949"
+                - name: tags
+                  in: query
+                  description: фильтр по uuid тега (возможно несколько, через запятую)
+                  schema:
+                      type: string
+                      example: "1a13bcc8-bdc9-4465-93bb-beb5dfc01aa7,1a13bcc8-bdc9-4465-93bb-adb5dfc23ce1"
+            responses:
+                "200":
+                    description: "Возвращает список задач по проекту"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                                    data:
+                                        type: array
+                                        items:
+                                            $ref: "#/components/schemas/Task"
+    /project/{id}/users:
+        get:
+            summary: Get users list by project
+            tags:
+                - tasks
+            parameters:
+                - name: id
+                  in: path
+                  description: ID проекта
+                  required: true
+                  schema:
+                      type: string
+                      example: "3422b448-2460-4fd2-9183-8000de6f8343"
+            responses:
+                "200":
+                    description: "Возвращает список пользователей по проекту"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                                    data:
+                                        type: array
+                                        items:
+                                            $ref: "#/components/schemas/UserLight"
+    /project/{id}/tags:
+        get:
+            summary: Get tags list by project
+            tags:
+                - tasks
+            parameters:
+                - name: id
+                  in: path
+                  description: ID проекта
+                  required: true
+                  schema:
+                      type: string
+                      example: "3422b448-2460-4fd2-9183-8000de6f8343"
+            responses:
+                "200":
+                    description: "Возвращает список тегов по проекту"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                                    data:
+                                        type: array
+                                        items:
+                                            $ref: "#/components/schemas/TagSet"
     /project-step:
         put:
             summary: "Create a new project step"
@@ -2182,22 +2287,22 @@ paths:
                         application/json:
                             schema:
                                 $ref: "#/components/schemas/Error"
-    /project/{id}/task:
+    /project-step/{id}/users:
         get:
-            summary: Get tasks list
+            summary: Get users list by project step
             tags:
                 - tasks
             parameters:
                 - name: id
                   in: path
-                  description: ID проекта
+                  description: ID этапа проекта
                   required: true
                   schema:
                       type: string
                       example: "3422b448-2460-4fd2-9183-8000de6f8343"
             responses:
                 "200":
-                    description: "Возвращает список задач по проекту"
+                    description: "Возвращает список пользователей по этапу проекта"
                     content:
                         application/json:
                             schema:
@@ -2210,8 +2315,37 @@ paths:
                                     data:
                                         type: array
                                         items:
-                                            $ref: "#/components/schemas/Task"
-    /project-step/{id}/task:
+                                            $ref: "#/components/schemas/UserLight"
+    /project-step/{id}/tags:
+        get:
+            summary: Get tags list by project step
+            tags:
+                - tasks
+            parameters:
+                - name: id
+                  in: path
+                  description: ID этапа проекта
+                  required: true
+                  schema:
+                      type: string
+                      example: "3422b448-2460-4fd2-9183-8000de6f8343"
+            responses:
+                "200":
+                    description: "Возвращает список тегов по этапу проекта"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                                    data:
+                                        type: array
+                                        items:
+                                            $ref: "#/components/schemas/TagSet"
+    /project-step/{id}/tasks:
         get:
             summary: Get tasks list
             tags:
@@ -3487,6 +3621,10 @@ components:
                 name:
                     type: string
                     example: "Example set 1"
+                tags:
+                    type: array
+                    items:
+                        $ref: "#/components/schemas/Tag"
         TagSetData:
             type: object
             required:
@@ -3500,10 +3638,6 @@ components:
                 name:
                     type: string
                     example: "Example set 1"
-                tags:
-                    type: array
-                    items:
-                        $ref: "#/components/schemas/Tag"
         Tag:
             type: object
             required:
