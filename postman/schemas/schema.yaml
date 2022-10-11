@@ -5,6 +5,9 @@ info:
     license:
         name: MIT
 servers:
+    # Added by API Auto Mocking Plugin
+    - description: SwaggerHub API Auto Mocking
+      url: https://virtserver.swaggerhub.com/mix8872/grechka.crm/1.0.0
     - url: "localhost:3000"
 paths:
     /user/login:
