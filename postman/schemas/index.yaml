@@ -5,9 +5,6 @@ info:
     license:
         name: MIT
 servers:
-    # Added by API Auto Mocking Plugin
-    - description: SwaggerHub API Auto Mocking
-      url: https://virtserver.swaggerhub.com/mix8872/grechka.crm/1.0.0
     - url: "localhost:3000"
 paths:
     /user/login:
@@ -974,11 +971,11 @@ paths:
                         application/json:
                             schema:
                                 $ref: "#/components/schemas/Error"
-    /kanban-set:
+    /canban-set:
         put:
-            summary: "Create a new kanban set"
+            summary: "Create a new canban set"
             tags:
-                - kanban-sets
+                - canban-sets
             requestBody:
                 required: true
                 content:
@@ -988,15 +985,15 @@ paths:
                             properties:
                                 name:
                                     type: string
-                                    example: "Kanban set 1"
+                                    example: "Canban set 1"
                                 statuses:
                                     type: array
                                     items:
                                         type: string
                                     example:
-                                        - "kanban 1"
-                                        - "kanban 2"
-                                        - "kanban 3"
+                                        - "canban 1"
+                                        - "canban 2"
+                                        - "canban 3"
             responses:
                 "200":
                     description: "Успешное добавление набора статусов"
@@ -1010,7 +1007,7 @@ paths:
                                         type: string
                                         example: "2022-09-06 12:33:02"
                                     data:
-                                        $ref: "#/components/schemas/KanbanSet"
+                                        $ref: "#/components/schemas/CanbanSet"
                 "403":
                     description: Forbidden
                     content:
@@ -1023,11 +1020,11 @@ paths:
                         application/json:
                             schema:
                                 $ref: "#/components/schemas/Error"
-    /kanban-set/list:
+    /canban-set/list:
         get:
-            summary: "Returns kanban sets list"
+            summary: "Returns canban sets list"
             tags:
-                - kanban-sets
+                - canban-sets
             parameters:
                 - name: step_id
                   in: query
@@ -1051,7 +1048,7 @@ paths:
                                     data:
                                         type: object
                                         example:
-                                            $ref: "#/components/schemas/KanbanSet"
+                                            $ref: "#/components/schemas/CanbanSet"
                 "403":
                     description: Forbidden
                     content:
@@ -1070,11 +1067,11 @@ paths:
                         application/json:
                             schema:
                                 $ref: "#/components/schemas/Error"
-    /kanban-set/{id}:
+    /canban-set/{id}:
         get:
-            summary: "Returns details about a particular kanban set"
+            summary: "Returns details about a particular canban set"
             tags:
-                - kanban-sets
+                - canban-sets
             parameters:
                 - name: id
                   in: path
@@ -1096,7 +1093,7 @@ paths:
                                         type: string
                                         example: "2022-09-06 12:33:02"
                                     data:
-                                        $ref: "#/components/schemas/KanbanSet"
+                                        $ref: "#/components/schemas/CanbanSet"
                 "403":
                     description: Forbidden
                     content:
@@ -1116,9 +1113,9 @@ paths:
                             schema:
                                 $ref: "#/components/schemas/Error"
         post:
-            summary: "Update kanban set data"
+            summary: "Update canban set data"
             tags:
-                - kanban
+                - canban
             parameters:
                 - name: id
                   in: path
@@ -1136,15 +1133,15 @@ paths:
                             properties:
                                 name:
                                     type: string
-                                    example: "Kanban set 1"
+                                    example: "Canban set 1"
                                 statuses:
                                     type: array
                                     items:
                                         type: string
                                     example:
-                                        - "kanban 1"
-                                        - "kanban 2"
-                                        - "kanban 3"
+                                        - "canban 1"
+                                        - "canban 2"
+                                        - "canban 3"
             responses:
                 "200":
                     description: "Успешное обновление данных набора статусов"
@@ -1158,7 +1155,7 @@ paths:
                                         type: string
                                         example: "2022-09-06 12:33:02"
                                     data:
-                                        $ref: "#/components/schemas/KanbanSet"
+                                        $ref: "#/components/schemas/CanbanSet"
                 "403":
                     description: Forbidden
                     content:
@@ -1178,13 +1175,13 @@ paths:
                             schema:
                                 $ref: "#/components/schemas/Error"
         delete:
-            summary: "Delete kanban set data"
+            summary: "Delete canban set data"
             tags:
-                - kanban
+                - canban
             parameters:
                 - name: id
                   in: path
-                  description: ID of the kanban set
+                  description: ID of the canban set
                   required: true
                   schema:
                       type: string
@@ -1219,15 +1216,15 @@ paths:
                         application/json:
                             schema:
                                 $ref: "#/components/schemas/Error"
-    /kanban/sort/{id}:
+    /canban/sort/{id}:
         post:
             summary: "Сортировка статусов в рамках набора"
             tags:
-                - kanban
+                - canban
             parameters:
                 - name: id
                   in: path
-                  description: ID of the kanban set
+                  description: ID of the canban set
                   required: true
                   schema:
                       type: string
@@ -1239,7 +1236,7 @@ paths:
                         schema:
                             type: object
                             properties:
-                                kanban_id:
+                                tags_id:
                                     type: array
                                     description: ID статусов в нужном порядке
                                     items:
@@ -1279,15 +1276,15 @@ paths:
                         application/json:
                             schema:
                                 $ref: "#/components/schemas/Error"
-    /kanban/{id}:
+    /canban/{id}:
         post:
-            summary: "Update kanban data"
+            summary: "Update canban data"
             tags:
-                - kanban
+                - canban
             parameters:
                 - name: id
                   in: path
-                  description: ID of the kanban
+                  description: ID of the canban
                   required: true
                   schema:
                       type: string
@@ -1317,7 +1314,7 @@ paths:
                                         type: string
                                         example: "2022-09-06 12:33:02"
                                     data:
-                                        $ref: "#/components/schemas/Kanban"
+                                        $ref: "#/components/schemas/Canban"
                 "403":
                     description: Forbidden
                     content:
@@ -1337,13 +1334,13 @@ paths:
                             schema:
                                 $ref: "#/components/schemas/Error"
         delete:
-            summary: "Delete kanban"
+            summary: "Delete canban"
             tags:
-                - kanban
+                - canban
             parameters:
                 - name: id
                   in: path
-                  description: ID of the kanban
+                  description: ID of the canban
                   required: true
                   schema:
                       type: string
@@ -3128,7 +3125,7 @@ components:
                     example: "prj1"
                 author:
                     $ref: "#/components/schemas/UserLight"
-                kanban_id:
+                canban_id:
                     type: string
                     example: "27b41992-99a4-4a85-8a6f-4481a6e40f95"
                 status:
@@ -3203,7 +3200,7 @@ components:
                     description: "Дней просрочки проекта (отрицательное значение - отсалось до сдачи, положительное - просрочка)"
                     format: int32
                     example: 0
-                kanban_id:
+                canban_id:
                     type: string
                     example: "27b41992-99a4-4a85-8a6f-4481a6e40f95"
                 status:
@@ -3267,7 +3264,7 @@ components:
                     type: array
                     items:
                         $ref: "#/components/schemas/TagSet"
-                kanban_set_id:
+                canban_set_id:
                     type: string
                     example: "25ef6a82-0255-4509-b5ff-4c6430fbfd8a"
                 delay:
@@ -3341,7 +3338,7 @@ components:
                     type: array
                     items:
                         $ref: "#/components/schemas/TagSet"
-                kanban_set_id:
+                canban_set_id:
                     type: string
                     example: "25ef6a82-0255-4509-b5ff-4c6430fbfd8a"
                 delay:
@@ -3443,7 +3440,7 @@ components:
                 - executor
                 - hours_plan
                 - plan
-                - kanban_id
+                - canban_id
                 - parent_id
                 - status
             properties:
@@ -3457,7 +3454,7 @@ components:
                     $ref: "#/components/schemas/UserLight"
                 executor:
                     $ref: "#/components/schemas/UserLight"
-                kanban_id:
+                canban_id:
                     type: string
                     example: "27b41992-99a4-4a85-8a6f-4481a6e40f95"
                 name:
@@ -3503,7 +3500,7 @@ components:
                 - executor
                 - hours_plan
                 - plan
-                - kanban_id
+                - canban_id
                 - parent_id
                 - status
                 - created_at
@@ -3525,7 +3522,7 @@ components:
                     $ref: "#/components/schemas/UserLight"
                 executor:
                     $ref: "#/components/schemas/UserLight"
-                kanban_id:
+                canban_id:
                     type: string
                     example: "27b41992-99a4-4a85-8a6f-4481a6e40f95"
                 name:
@@ -3664,7 +3661,7 @@ components:
                     type: number
                     format: int32
                     example: 3
-        KanbanSet:
+        CanbanSet:
             type: object
             required:
                 - id
@@ -3679,14 +3676,14 @@ components:
                 statuses:
                     type: array
                     items:
-                        $ref: "#/components/schemas/Kanban"
+                        $ref: "#/components/schemas/Canban"
                 created_at:
                     type: string
                     example: "2022-07-05 18:33:43"
                 updated_at:
                     type: string
                     example: "2022-07-05 18:33:43"
-        Kanban:
+        Canban:
             type: object
             required:
                 - id
