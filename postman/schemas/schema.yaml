@@ -816,64 +816,6 @@ paths:
                         application/json:
                             schema:
                                 $ref: "#/components/schemas/Error"
-    /tag/sort/{id}:
-        post:
-            summary: "Сортировка тегов в рамках набора"
-            tags:
-                - tags
-            parameters:
-                - name: id
-                  in: path
-                  description: ID of the tag set
-                  required: true
-                  schema:
-                      type: string
-                      example: "3422b448-2460-4fd2-9183-8000de6f8343"
-            requestBody:
-                required: true
-                content:
-                    application/json:
-                        schema:
-                            type: object
-                            properties:
-                                tags_id:
-                                    type: array
-                                    description: ID тегов в нужном порядке
-                                    items:
-                                        type: string
-                                    example:
-                                        - "1a13bcc8-bdc9-4465-93bb-beb5dfc01aa7"
-                                        - "834a7479-43e4-483f-af61-e8e526dac1c5"
-            responses:
-                "200":
-                    description: "Успешное сортировка меток"
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    tokenExpiration:
-                                        description: "Таймштамп истечения токена"
-                                        type: string
-                                        example: "2022-09-06 12:33:02"
-                "403":
-                    description: Forbidden
-                    content:
-                        application/json:
-                            schema:
-                                $ref: "#/components/schemas/Error"
-                "404":
-                    description: Not found
-                    content:
-                        application/json:
-                            schema:
-                                $ref: "#/components/schemas/Error"
-                "500":
-                    description: Unexpected error
-                    content:
-                        application/json:
-                            schema:
-                                $ref: "#/components/schemas/Error"
     /tag/{id}:
         post:
             summary: "Update tag data"
@@ -944,6 +886,64 @@ paths:
             responses:
                 "200":
                     description: "Успешное удвление метки"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                "403":
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "404":
+                    description: Not found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+    /tag/{id}/sort:
+        post:
+            summary: "Сортировка тегов в рамках набора"
+            tags:
+                - tags
+            parameters:
+                - name: id
+                  in: path
+                  description: ID of the tag set
+                  required: true
+                  schema:
+                      type: string
+                      example: "3422b448-2460-4fd2-9183-8000de6f8343"
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                tags_id:
+                                    type: array
+                                    description: ID тегов в нужном порядке
+                                    items:
+                                        type: string
+                                    example:
+                                        - "1a13bcc8-bdc9-4465-93bb-beb5dfc01aa7"
+                                        - "834a7479-43e4-483f-af61-e8e526dac1c5"
+            responses:
+                "200":
+                    description: "Успешное сортировка меток"
                     content:
                         application/json:
                             schema:
@@ -1216,66 +1216,6 @@ paths:
                         application/json:
                             schema:
                                 $ref: "#/components/schemas/Error"
-    /kanban/sort/{id}:
-        post:
-            summary: "Сортировка статусов в рамках набора"
-            tags:
-                - kanban
-            parameters:
-                - name: id
-                  in: path
-                  description: ID of the kanban set
-                  required: true
-                  schema:
-                      type: string
-                      example: "3422b448-2460-4fd2-9183-8000de6f8343"
-            requestBody:
-                required: true
-                content:
-                    application/json:
-                        schema:
-                            type: object
-                            properties:
-                                kanban_id:
-                                    type: array
-                                    description: ID статусов в нужном порядке
-                                    items:
-                                        type: string
-                                    example:
-                                        - "1a13bcc8-bdc9-4465-93bb-beb5dfc01aa7"
-                                        - "834a7479-43e4-483f-af61-e8e526dac1c5"
-                                        - "1a13bcc8-bdc9-4465-93bb-beb5dfc01aa7"
-                                        - "834a7479-43e4-483f-af61-e8e526dac1c5"
-            responses:
-                "200":
-                    description: "Успешное сортировка статусов"
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    tokenExpiration:
-                                        description: "Таймштамп истечения токена"
-                                        type: string
-                                        example: "2022-09-06 12:33:02"
-                "403":
-                    description: Forbidden
-                    content:
-                        application/json:
-                            schema:
-                                $ref: "#/components/schemas/Error"
-                "404":
-                    description: Not found
-                    content:
-                        application/json:
-                            schema:
-                                $ref: "#/components/schemas/Error"
-                "500":
-                    description: Unexpected error
-                    content:
-                        application/json:
-                            schema:
-                                $ref: "#/components/schemas/Error"
     /kanban/{id}:
         post:
             summary: "Update kanban data"
@@ -1375,14 +1315,39 @@ paths:
                         application/json:
                             schema:
                                 $ref: "#/components/schemas/Error"
-    /project/list:
-        get:
-            summary: Get projects list
+    /kanban/{id}/sort:
+        post:
+            summary: "Сортировка статусов в рамках набора"
             tags:
-                - projects
+                - kanban
+            parameters:
+                - name: id
+                  in: path
+                  description: ID of the kanban set
+                  required: true
+                  schema:
+                      type: string
+                      example: "3422b448-2460-4fd2-9183-8000de6f8343"
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                kanban_id:
+                                    type: array
+                                    description: ID статусов в нужном порядке
+                                    items:
+                                        type: string
+                                    example:
+                                        - "1a13bcc8-bdc9-4465-93bb-beb5dfc01aa7"
+                                        - "834a7479-43e4-483f-af61-e8e526dac1c5"
+                                        - "1a13bcc8-bdc9-4465-93bb-beb5dfc01aa7"
+                                        - "834a7479-43e4-483f-af61-e8e526dac1c5"
             responses:
                 "200":
-                    description: "Возвращает список проектов"
+                    description: "Успешное сортировка статусов"
                     content:
                         application/json:
                             schema:
@@ -1392,10 +1357,24 @@ paths:
                                         description: "Таймштамп истечения токена"
                                         type: string
                                         example: "2022-09-06 12:33:02"
-                                    data:
-                                        type: array
-                                        items:
-                                            $ref: "#/components/schemas/ProjectList"
+                "403":
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "404":
+                    description: Not found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
     /project:
         put:
             summary: "Create a new project"
@@ -1433,6 +1412,27 @@ paths:
                         application/json:
                             schema:
                                 $ref: "#/components/schemas/Error"
+    /project/list:
+        get:
+            summary: Get projects list
+            tags:
+                - projects
+            responses:
+                "200":
+                    description: "Возвращает список проектов"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    tokenExpiration:
+                                        description: "Таймштамп истечения токена"
+                                        type: string
+                                        example: "2022-09-06 12:33:02"
+                                    data:
+                                        type: array
+                                        items:
+                                            $ref: "#/components/schemas/ProjectList"
     /project/{id}:
         get:
             summary: "Returns details about a particular project"
@@ -1849,7 +1849,7 @@ paths:
                         application/json:
                             schema:
                                 $ref: "#/components/schemas/Error"
-    /project-step/set-team/{id}:
+    /project-step/{id}/set-team:
         put:
             summary: "Задает команду этапа проекта (заменяет текущую команду)"
             tags:
@@ -1964,7 +1964,7 @@ paths:
                         application/json:
                             schema:
                                 $ref: "#/components/schemas/Error"
-    /project-step/delete-team/{id}:
+    /project-step/{id}/delete-team:
         post:
             summary: "Удаляет из команды этапа проекта"
             tags:
@@ -2022,7 +2022,7 @@ paths:
                         application/json:
                             schema:
                                 $ref: "#/components/schemas/Error"
-    /project-step/set-hours/{id}:
+    /project-step/{id}/set-hours:
         put:
             summary: "Задает проданные часы этапа проекта (заменяет текущие данные)"
             tags:
@@ -2135,7 +2135,7 @@ paths:
                         application/json:
                             schema:
                                 $ref: "#/components/schemas/Error"
-    /project-step/delete-hours/{id}:
+    /project-step/{id}/delete-hours:
         post:
             summary: "Удаляет проданные часы этпа проекта"
             tags:
@@ -2190,13 +2190,13 @@ paths:
                         application/json:
                             schema:
                                 $ref: "#/components/schemas/Error"
-    /project-step/tags/{step-id}/{tag-set-id}:
+    /project-step/{id}/tags/{tag-set-id}:
         put:
             summary: "Добавляет набор меток этапу проекта"
             tags:
                 - project-steps
             parameters:
-                - name: step-id
+                - name: id
                   in: path
                   description: ID of the project step
                   required: true
@@ -3114,7 +3114,7 @@ components:
             required:
                 - name
                 - code
-                - author
+                - author_id
                 - status
             properties:
                 name:
@@ -3123,11 +3123,9 @@ components:
                 code:
                     type: string
                     example: "prj1"
-                author:
-                    $ref: "#/components/schemas/UserLight"
-                kanban_id:
+                author_id:
                     type: string
-                    example: "27b41992-99a4-4a85-8a6f-4481a6e40f95"
+                    example: "0d6964cb-0683-42cb-b6a6-60f0dd6d859d"
                 status:
                     type: integer
                     format: int32
@@ -3200,9 +3198,6 @@ components:
                     description: "Дней просрочки проекта (отрицательное значение - отсалось до сдачи, положительное - просрочка)"
                     format: int32
                     example: 0
-                kanban_id:
-                    type: string
-                    example: "27b41992-99a4-4a85-8a6f-4481a6e40f95"
                 status:
                     type: integer
                     format: int32
@@ -3220,8 +3215,8 @@ components:
                 - code
                 - name
                 - description
-                - author
-                - responsible
+                - author_id
+                - responsible_id
                 - start_date
                 - end_date
                 - working_type
@@ -3239,10 +3234,12 @@ components:
                 description:
                     type: string
                     example: "A Version 1 UUID is a universally unique identifier that is generated using a timestamp and the MAC address of the computer on which it was generated."
-                author:
-                    $ref: "#/components/schemas/UserLight"
-                responsible:
-                    $ref: "#/components/schemas/UserLight"
+                author_id:
+                    type: string
+                    example: "0d6964cb-0683-42cb-b6a6-60f0dd6d859d"
+                responsible_id:
+                    type: string
+                    example: "0d6964cb-0683-42cb-b6a6-60f0dd6d859d"
                 cost:
                     type: string
                     nullable: true
