@@ -2244,7 +2244,7 @@ paths:
             tags:
                 - project-steps
             parameters:
-                - name: step-id
+                - name: id
                   in: path
                   description: ID of the project step
                   required: true
